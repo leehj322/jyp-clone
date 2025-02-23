@@ -1,6 +1,6 @@
 import useToggle from "@/hooks/useToggle";
 import getElementsFromChildren from "@/utils/getElementsFromChildren";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import Slot from "./Slot";
 import { twMerge } from "tailwind-merge";
 
@@ -59,6 +59,7 @@ interface DropdownProps {
 
 export function Dropdown({ children }: DropdownProps) {
   const [isOpen, toggleIsOpen, setIsOpen] = useToggle(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const TriggerElement = getElementsFromChildren({
     children,
@@ -72,8 +73,22 @@ export function Dropdown({ children }: DropdownProps) {
 
   const closeDropdown = () => setIsOpen(false);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!dropdownRef?.current) return;
+
+      if (!dropdownRef?.current.contains(e.target as HTMLElement)) {
+        closeDropdown();
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <Slot onClick={toggleIsOpen}>{TriggerElement}</Slot>
       {isOpen && (
         <Slot className="cursor-pointer" onClick={closeDropdown}>
