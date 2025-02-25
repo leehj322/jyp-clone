@@ -85,7 +85,8 @@ interface CarouselProps {
 }
 
 export function Carousel({ children, className }: CarouselProps) {
-  const [currentSlide, setCurrentSlide] = useState(1);
+  const [currentSlideIdx, setCurrentSlideIdx] = useState(1);
+  const [currentSlideNum, setCurrentSlideNum] = useState(1);
 
   const ItemElements = getElementsFromChildren({
     children,
@@ -96,14 +97,36 @@ export function Carousel({ children, className }: CarouselProps) {
 
   const handlePrevButtonClick = (e: MouseEvent) => {
     e.preventDefault();
-    if (currentSlide === 1) return;
-    setCurrentSlide((prev) => prev - 1);
+
+    if (currentSlideIdx === 1) {
+      setCurrentSlideNum(slidesCount);
+      setCurrentSlideIdx((prev) => prev - 1); // fake slide
+
+      // Replace with actual slide
+      setTimeout(() => {
+        setCurrentSlideIdx(slidesCount);
+      }, 300);
+    } else {
+      setCurrentSlideNum((prev) => prev - 1);
+      setCurrentSlideIdx((prev) => prev - 1);
+    }
   };
 
   const handleNextButtonClick = (e: MouseEvent) => {
     e.preventDefault();
-    if (currentSlide === slidesCount) return;
-    setCurrentSlide((prev) => prev + 1);
+
+    if (currentSlideIdx === slidesCount) {
+      setCurrentSlideNum(1);
+      setCurrentSlideIdx((prev) => prev + 1); // fake slide
+
+      // Replace with actual slide
+      setTimeout(() => {
+        setCurrentSlideIdx(1);
+      }, 300);
+    } else {
+      setCurrentSlideNum((prev) => prev + 1);
+      setCurrentSlideIdx((prev) => prev + 1);
+    }
   };
 
   return (
@@ -115,12 +138,14 @@ export function Carousel({ children, className }: CarouselProps) {
     >
       <div
         className="absolute flex h-full"
-        style={{ transform: `translateX(-${(currentSlide - 1) * 100}vw)` }}
+        style={{ transform: `translateX(-${currentSlideIdx * 100}vw)` }}
       >
+        {ItemElements[slidesCount - 1]}
         {ItemElements}
+        {ItemElements[0]}
       </div>
       <CarouselNavigation
-        currentSlide={currentSlide}
+        currentSlide={currentSlideNum}
         slidesCount={slidesCount}
         onPrevButtonClick={handlePrevButtonClick}
         onNextButtonClick={handleNextButtonClick}
