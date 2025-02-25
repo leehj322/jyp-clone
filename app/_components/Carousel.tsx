@@ -2,7 +2,7 @@ import getElementsFromChildren from "@/utils/getElementsFromChildren";
 import padZero from "@/utils/padZero";
 import Image from "next/image";
 import { ReactNode, useState, MouseEvent } from "react";
-import { twMerge } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
 
 interface CarouselBackgroundProps {
   children: ReactNode;
@@ -88,6 +88,8 @@ export function Carousel({ children, className }: CarouselProps) {
   const [currentSlideIdx, setCurrentSlideIdx] = useState(1);
   const [currentSlideNum, setCurrentSlideNum] = useState(1);
 
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const ItemElements = getElementsFromChildren({
     children,
     targetElement: <CarouselItem />,
@@ -97,6 +99,7 @@ export function Carousel({ children, className }: CarouselProps) {
 
   const handlePrevButtonClick = (e: MouseEvent) => {
     e.preventDefault();
+    setIsAnimating(true);
 
     if (currentSlideIdx === 1) {
       setCurrentSlideNum(slidesCount);
@@ -104,6 +107,7 @@ export function Carousel({ children, className }: CarouselProps) {
 
       // Replace with actual slide
       setTimeout(() => {
+        setIsAnimating(false);
         setCurrentSlideIdx(slidesCount);
       }, 300);
     } else {
@@ -114,6 +118,7 @@ export function Carousel({ children, className }: CarouselProps) {
 
   const handleNextButtonClick = (e: MouseEvent) => {
     e.preventDefault();
+    setIsAnimating(true);
 
     if (currentSlideIdx === slidesCount) {
       setCurrentSlideNum(1);
@@ -121,6 +126,7 @@ export function Carousel({ children, className }: CarouselProps) {
 
       // Replace with actual slide
       setTimeout(() => {
+        setIsAnimating(false);
         setCurrentSlideIdx(1);
       }, 300);
     } else {
@@ -137,7 +143,10 @@ export function Carousel({ children, className }: CarouselProps) {
       )}
     >
       <div
-        className="absolute flex h-full"
+        className={twJoin(
+          "absolute flex h-full",
+          isAnimating && "transition-transform duration-200 ease-in-out",
+        )}
         style={{ transform: `translateX(-${currentSlideIdx * 100}vw)` }}
       >
         {ItemElements[slidesCount - 1]}
