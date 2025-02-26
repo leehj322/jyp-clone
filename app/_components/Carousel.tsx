@@ -1,7 +1,7 @@
 import getElementsFromChildren from "@/utils/getElementsFromChildren";
 import padZero from "@/utils/padZero";
 import Image from "next/image";
-import { ReactNode, useState, MouseEvent } from "react";
+import { ReactNode, useState, MouseEvent, TouchEvent } from "react";
 import { twJoin, twMerge } from "tailwind-merge";
 
 interface CarouselBackgroundProps {
@@ -14,9 +14,7 @@ export function CarouselBackground({
   className,
 }: CarouselBackgroundProps) {
   return (
-    <div className={twMerge("absolute h-[100vh] w-full", className)}>
-      {children}
-    </div>
+    <div className={twMerge("h-[100vh] w-full", className)}>{children}</div>
   );
 }
 
@@ -90,6 +88,9 @@ export function Carousel({ children, className }: CarouselProps) {
 
   const [isAnimating, setIsAnimating] = useState(false);
 
+  const [mouseStartX, setMouseStartX] = useState(0);
+  const [touchLocationX, setTouchLocationX] = useState(0);
+
   const ItemElements = getElementsFromChildren({
     children,
     targetElement: <CarouselItem />,
@@ -97,8 +98,7 @@ export function Carousel({ children, className }: CarouselProps) {
 
   const slidesCount = ItemElements.length;
 
-  const handlePrevButtonClick = (e: MouseEvent) => {
-    e.preventDefault();
+  const goPrevSlide = () => {
     setIsAnimating(true);
 
     if (currentSlideIdx === 1) {
@@ -116,8 +116,7 @@ export function Carousel({ children, className }: CarouselProps) {
     }
   };
 
-  const handleNextButtonClick = (e: MouseEvent) => {
-    e.preventDefault();
+  const goNextSlide = () => {
     setIsAnimating(true);
 
     if (currentSlideIdx === slidesCount) {
@@ -135,12 +134,55 @@ export function Carousel({ children, className }: CarouselProps) {
     }
   };
 
+  // on touch or swipe event, check threshold and go to next or prev slide
+  const checkAndMoveSlide = (distanceX: number) => {
+    const SLIDE_THRESHOLD_RATIO = 0.2;
+
+    if (distanceX >= window.innerWidth * SLIDE_THRESHOLD_RATIO) {
+      goNextSlide();
+    } else if (distanceX <= -window.innerWidth * SLIDE_THRESHOLD_RATIO) {
+      goPrevSlide();
+    }
+  };
+
+  const handlePrevButtonClick = (e: MouseEvent) => {
+    e.preventDefault();
+    goPrevSlide();
+  };
+
+  const handleNextButtonClick = (e: MouseEvent) => {
+    e.preventDefault();
+    goNextSlide();
+  };
+
+  const handleMouseDown = (e: MouseEvent) => {
+    setMouseStartX(e.pageX);
+  };
+
+  const handleMouseUp = (e: MouseEvent) => {
+    const distanceX = mouseStartX - e.pageX;
+    checkAndMoveSlide(distanceX);
+  };
+
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchLocationX(e.changedTouches[0].pageX);
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    const distanceX = touchLocationX - e.changedTouches[0].pageX;
+    checkAndMoveSlide(distanceX);
+  };
+
   return (
     <section
       className={twMerge(
         "absolute h-[100vh] w-[100vw] overflow-hidden",
         className,
       )}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <div
         className={twJoin(
