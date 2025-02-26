@@ -23,9 +23,14 @@ interface CarouselTitleProps {
   className?: string;
 }
 
-export function CarouselTitle({ children }: CarouselTitleProps) {
+export function CarouselTitle({ children, className }: CarouselTitleProps) {
   return (
-    <h2 className="text-center text-[20px] font-bold text-white lg:text-[24px]">
+    <h2
+      className={twMerge(
+        "text-center text-[20px] font-bold text-white lg:text-[24px]",
+        className,
+      )}
+    >
       {children}
     </h2>
   );
@@ -36,9 +41,17 @@ interface CarouselDescriptionProps {
   className?: string;
 }
 
-export function CarouselDescription({ children }: CarouselDescriptionProps) {
+export function CarouselDescription({
+  children,
+  className,
+}: CarouselDescriptionProps) {
   return (
-    <p className="text-center text-[26px] font-extrabold text-white lg:text-[28px]">
+    <p
+      className={twMerge(
+        "text-center text-[26px] font-extrabold text-white lg:text-[28px]",
+        className,
+      )}
+    >
       {children}
     </p>
   );
