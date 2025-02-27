@@ -1,5 +1,6 @@
 import Image from "next/image";
 import LangDropdown from "./LangDropdown";
+import Menu from "./Menu";
 
 export default function Header() {
   return (
@@ -51,14 +52,7 @@ export default function Header() {
         <div className="dropdown-wrapper hidden lg:block">
           <LangDropdown />
         </div>
-        <button className="flex flex-col items-center justify-center gap-1">
-          <span className="h-[2px] w-[25px] rounded bg-white" />
-          <span className="h-[2px] w-[25px] rounded bg-white" />
-          <span className="h-[2px] w-[25px] rounded bg-white" />
-        </button>
-        {/* <div className="fixed inset-0 -z-10 bg-[#0f0e0e] transition-all duration-500">
-            <section className="mx-auto flex justify-center"></section>
-          </div> */}
+        <Menu />
       </div>
     </header>
   );
