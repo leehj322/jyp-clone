@@ -1,10 +1,11 @@
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
+import MainCarousel from "./_components/MainCarousel";
 
 export default function Home() {
   return (
     <>
-      <div className="absolute h-[100vh] w-[100vw] bg-black" />
+      <MainCarousel />
       <Header />
       <Footer />
     </>
