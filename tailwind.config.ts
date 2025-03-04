@@ -7,6 +7,13 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1164px",
+      "2xl": "1392px",
+    },
     extend: {
       keyframes: {
         "slide-down-in": {
@@ -33,8 +40,11 @@ export default {
         "slide-down-out": "slide-down-out 0.2s ease-in-out",
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        menuBg: "#0f0e0e",
+        footerBg: "#242426",
+        menuText: "#959595",
+        submenuText: "#a0a0a0",
+        footerText: "#e5e8e8",
       },
     },
   },
