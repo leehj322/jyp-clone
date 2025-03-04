@@ -2,6 +2,9 @@
 
 import useToggle from "@/hooks/useToggle";
 import { twMerge, twJoin } from "tailwind-merge";
+import DefaultMenu from "./DefaultMenu";
+import MobileMenu from "./MobileMenu";
+import { MenuData } from "@/lib/types/menu";
 
 interface HamburgerButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   isOpen: boolean;
@@ -64,11 +67,65 @@ function MobileMenuCloseButton({
       className={twMerge("relative h-[20px] w-[20px]", className)}
       {...props}
     >
-      <span className="absolute top-1/2 h-[2px] w-[20px] rotate-[-45deg] rounded bg-white" />
-      <span className="absolute top-1/2 h-[2px] w-[20px] rotate-[45deg] rounded bg-white" />
+      <span className="absolute left-1/2 top-1/2 h-[2px] w-[20px] -translate-x-1/2 -translate-y-1/2 rotate-[-45deg] rounded bg-white" />
+      <span className="absolute left-1/2 top-1/2 h-[2px] w-[20px] -translate-x-1/2 -translate-y-1/2 rotate-[45deg] rounded bg-white" />
     </button>
   );
 }
+
+const MENU_DATA_LIST = [
+  {
+    titleItem: { label: "JYP", href: "#" },
+    menuItems: [
+      { label: "ABOUT JYP", href: "#" },
+      { label: "HISTORY", href: "#" },
+      { label: "NOTICE", href: "#" },
+      { label: "CONTACT", href: "#" },
+    ],
+  },
+  {
+    titleItem: { label: "ARTIST", href: "#" },
+    menuItems: [
+      { label: "ARTIST", href: "#" },
+      { label: "ALBUM", href: "#" },
+      { label: "VIDEO", href: "#" },
+    ],
+  },
+  {
+    titleItem: { label: "SUSTAINABILITY", href: "#" },
+    menuItems: [
+      { label: "ESG STRATEGY", href: "#" },
+      {
+        label: "ESG FACTBOOK",
+        href: "#",
+        subItems: [
+          { label: "ENVIRONMENTAL", href: "#" },
+          { label: "SOCIAL", href: "#" },
+          { label: "GOVERNANCE", href: "#" },
+        ],
+      },
+      { label: "ESG REPORTING", href: "#" },
+    ],
+  },
+  {
+    titleItem: { label: "IR", href: "#" },
+    menuItems: [
+      {
+        label: "STOCK INFO.",
+        href: "#",
+        subItems: [
+          { label: "STOCK INFORMATION", href: "#" },
+          { label: "DIVIDENES STATUS", href: "#" },
+        ],
+      },
+      { label: "FINANCIAL INFO.", href: "#" },
+      { label: "PUBLIC DISCLOSURE INFO.", href: "#" },
+      { label: "DATA & MATERIALS", href: "#" },
+      { label: "NEWS", href: "#" },
+      { label: "IR INQUIRY", href: "#" },
+    ],
+  },
+];
 
 export default function Menu() {
   const [isMenuOpen, toggleMenuOpen] = useToggle(false);
@@ -80,10 +137,13 @@ export default function Menu() {
       <HamburgerButton isOpen={isMenuOpen} onClick={handleMenuButtonClick} />
       {isMenuOpen && (
         <>
-          <menu className="fixed inset-0 -z-10 hidden bg-[#0f0e0e] lg:block"></menu>
-          <menu className="fixed inset-0 z-10 block bg-[#0f0e0e] lg:hidden">
-            <MobileMenuCloseButton onClick={handleMenuButtonClick} />
-          </menu>
+          <DefaultMenu menuDataList={MENU_DATA_LIST as MenuData[]} />
+          <MobileMenu
+            closeButton={
+              <MobileMenuCloseButton onClick={handleMenuButtonClick} />
+            }
+            menuDataList={MENU_DATA_LIST as MenuData[]}
+          />
         </>
       )}
     </>
