@@ -9,15 +9,6 @@ import {
   CarouselBackground,
 } from "@/app/_components/Carousel";
 
-declare global {
-  interface Window {
-    YT: {
-      Player: new (id: string, options: object) => null;
-    };
-    onYouTubeIframeAPIReady: { (): void } | null;
-  }
-}
-
 const CAROUSEL_ITEM_LIST = [
   {
     title: "KickFlip",
