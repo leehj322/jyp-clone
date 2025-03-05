@@ -14,7 +14,14 @@ export function CarouselBackground({
   className,
 }: CarouselBackgroundProps) {
   return (
-    <div className={twMerge("h-[100vh] w-full", className)}>{children}</div>
+    <div
+      className={twMerge(
+        "h-[100vh] w-full supports-[height:100dvh]:h-[100dvh]",
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -189,7 +196,7 @@ export function Carousel({ children, className }: CarouselProps) {
   return (
     <section
       className={twMerge(
-        "absolute h-[100vh] w-[100vw] overflow-hidden",
+        "absolute h-[100vh] w-[100vw] overflow-hidden supports-[height:100dvh]:h-[100dvh]",
         className,
       )}
       onMouseDown={handleMouseDown}
