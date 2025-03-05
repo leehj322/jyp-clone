@@ -276,7 +276,7 @@ function CarouselNavigation({
     <>
       <div className="wrapper absolute h-full w-full">
         <button
-          className="carousel-button-prev absolute bottom-0 left-0 top-0 hidden w-[20%] lg:block"
+          className="carousel-button-prev absolute bottom-0 left-0 top-0 hidden w-[20%] cursor-[url('/cursor/carousel-prev-cursor.png'),_pointer] lg:block"
           onClick={onPrevButtonClick}
         >
           <div className="carousel-pagination absolute left-10 top-[45%] hidden gap-2 text-white lg:flex">
@@ -294,7 +294,7 @@ function CarouselNavigation({
           </div>
         </button>
         <button
-          className="carousel-button-next absolute bottom-0 right-0 top-0 hidden w-[20%] lg:block"
+          className="carousel-button-next absolute bottom-0 right-0 top-0 hidden w-[20%] cursor-[url('/cursor/carousel-next-cursor.png'),_pointer] lg:block"
           onClick={onNextButtonClick}
         >
           <div className="carousel-navigation absolute right-10 top-[45%] hidden gap-2 text-white lg:flex">
