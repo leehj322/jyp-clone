@@ -133,6 +133,10 @@ export function Carousel({ children, className }: CarouselProps) {
     } else {
       setCurrentSlideNum((prev) => prev - 1);
       setCurrentSlideIdx((prev) => prev - 1);
+
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 300);
     }
   };
 
@@ -151,6 +155,10 @@ export function Carousel({ children, className }: CarouselProps) {
     } else {
       setCurrentSlideNum((prev) => prev + 1);
       setCurrentSlideIdx((prev) => prev + 1);
+
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 300);
     }
   };
 
