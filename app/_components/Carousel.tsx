@@ -111,6 +111,9 @@ export function Carousel({ children, className }: CarouselProps) {
   const [mouseStartX, setMouseStartX] = useState(0);
   const [touchLocationX, setTouchLocationX] = useState(0);
 
+  const [dragOffsetX, setDragOffsetX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
   const ItemElements = getElementsFromChildren({
     children,
     targetElement: <CarouselItem />,
@@ -184,21 +187,37 @@ export function Carousel({ children, className }: CarouselProps) {
   };
 
   const handleMouseDown = (e: MouseEvent) => {
+    setIsDragging(true);
     setMouseStartX(e.pageX);
   };
 
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging) return;
+    setDragOffsetX(e.pageX - mouseStartX);
+  };
+
   const handleMouseUp = (e: MouseEvent) => {
+    setIsDragging(false);
     const distanceX = mouseStartX - e.pageX;
     checkAndMoveSlide(distanceX);
+    setDragOffsetX(0);
   };
 
   const handleTouchStart = (e: TouchEvent) => {
+    setIsDragging(true);
     setTouchLocationX(e.changedTouches[0].pageX);
   };
 
+  const handleTouchMove = (e: TouchEvent) => {
+    if (!isDragging) return;
+    setDragOffsetX(e.touches[0].pageX - touchLocationX);
+  };
+
   const handleTouchEnd = (e: TouchEvent) => {
+    setIsDragging(false);
     const distanceX = touchLocationX - e.changedTouches[0].pageX;
     checkAndMoveSlide(distanceX);
+    setDragOffsetX(0);
   };
 
   return (
@@ -208,8 +227,10 @@ export function Carousel({ children, className }: CarouselProps) {
         className,
       )}
       onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       <div
@@ -217,7 +238,9 @@ export function Carousel({ children, className }: CarouselProps) {
           "absolute flex h-full",
           isAnimating && "transition-transform duration-200 ease-in-out",
         )}
-        style={{ transform: `translateX(-${currentSlideIdx * 100}vw)` }}
+        style={{
+          transform: `translateX(calc(-${currentSlideIdx * 100}vw + ${dragOffsetX}px))`,
+        }}
       >
         {ItemElements[slidesCount - 1]}
         {ItemElements}
