@@ -22,6 +22,7 @@ function HamburgerButton({
           "relative hidden h-[25px] w-[25px] flex-col items-center justify-center gap-1 lg:flex",
           className,
         )}
+        aria-label="menu"
         {...props}
       >
         <span
@@ -49,6 +50,7 @@ function HamburgerButton({
           className,
         )}
         {...props}
+        aria-label="menu"
       >
         <span className="h-[2px] w-[20px] rounded bg-white transition-opacity" />
         <span className="h-[2px] w-[20px] rounded bg-white transition-opacity" />
